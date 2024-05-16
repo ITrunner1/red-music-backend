@@ -10,6 +10,7 @@ import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import { SongModule } from './song/song.module';
 import { UserModule } from './user/user.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { UserModule } from './user/user.module';
     SongModule,
     AdminModule,
     PlaylistModule,
-    FileModule
+    FileModule,
+    CommentModule
   ],
   controllers: [AppController],
   providers: [AppService],
