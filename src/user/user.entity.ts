@@ -10,7 +10,7 @@ export class UserEntity extends Base {
     @Column({unique:true})
     email: string
 
-    @Column({select: false})
+    @Column({})
     password: string
 
     @Column({default:''})
@@ -38,7 +38,7 @@ export class UserEntity extends Base {
     comments: SongEntity[]
 
     @OneToMany(() => SubscriptionEntity, sub => sub.fromUser)
-    subscription: SubscriptionEntity[]
+    subscriptions: SubscriptionEntity[]
 
     @OneToMany(() => SubscriptionEntity, sub => sub.toArtist)
     subscribers: SubscriptionEntity[]
