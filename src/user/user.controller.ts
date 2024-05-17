@@ -34,7 +34,7 @@ export class UserController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Auth()
-  @Put('subscriber/:artistId')
+  @Patch('subscriber/:artistId')
   async subscribeToArtist(
     @CurrentUser('id') id: string,
     @Param('artistId') artistId: string
