@@ -15,7 +15,6 @@ export class SongController {
   }
 
   @Get('')
-  @Auth()
   async getAllSongs(@Query('searchTerm') searchTerm?: string) {
       return this.songService.getAllSongs(searchTerm)
   }

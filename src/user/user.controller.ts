@@ -20,21 +20,21 @@ export class UserController {
       return this.userService.byId(+id)
   }
 
-  // @UsePipes(new ValidationPipe())
-  // @HttpCode(200)
-  // @Auth()
-  // @Put('profile')
-  // async updateCurrentUserProfile(
-  //   @CurrentUser('id') id: number, 
-  //   @Body() dto: UserDto
-  // ){
-  //     return this.userService.updateProfile(+id, dto)
-  // }
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Auth()
+  @Put('profile')
+  async updateCurrentUserProfile(
+    @CurrentUser('id') id: number, 
+    @Body() dto: UserDto
+  ){
+      return this.userService.updateProfile(+id, dto)
+  }
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Auth()
-  @Patch('subscriber/:artistId')
+  @Patch('subscribe/:artistId')
   async subscribeToArtist(
     @CurrentUser('id') id: string,
     @Param('artistId') artistId: string
