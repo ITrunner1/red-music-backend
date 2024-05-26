@@ -8,19 +8,18 @@ import { SongDto } from './song.dto';
 export class SongController {
   constructor(private readonly songService: SongService) {}
 
-  @Get('song/profile')
-  @Auth()
-  async getPrivateSong(@CurrentUser('id') id: number) {
-      return this.songService.byId(+id)
-  }
-
-  @Get('')
+  @Get()
   async getAllSongs(@Query('searchTerm') searchTerm?: string) {
       return this.songService.getAllSongs(searchTerm)
   }
 
-  @Get('most-popular')
+  @Get('song/profile')
   @Auth()
+  async getPrivateSong(@CurrentUser('id') id: number) {
+      return this.songService.byId(+id)
+  }  
+
+  @Get('most-popular')  
   async getMostPopularByListens() {
       return this.songService.getMostPopularByListens()
   }
