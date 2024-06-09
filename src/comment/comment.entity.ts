@@ -9,11 +9,11 @@ export class CommentEntity extends Base {
     @Column({default:'', type: 'text'})
     text: string
 
-    @ManyToOne(() => UserEntity, user => user.songs)
+    @ManyToOne(() => UserEntity, user => user.songs, { onDelete: 'CASCADE' })
     @JoinColumn({name: 'user_id'})
     user: UserEntity
 
-    @ManyToOne(() => SongEntity, song => song.comments)
+    @ManyToOne(() => SongEntity, song => song.comments, { onDelete: 'CASCADE'})
     @JoinColumn({name: 'song_id'})
     song: SongEntity
 }

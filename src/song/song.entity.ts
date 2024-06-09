@@ -31,13 +31,13 @@ export class SongEntity extends Base {
     @Column({default:'', name: 'thumbnail_path'})
     thumbnailPath: string
 
-    @ManyToOne(() => UserEntity, user => user.songs)
+    @ManyToOne(() => UserEntity, user => user.songs, {onDelete: 'CASCADE'})
     @JoinColumn({name: 'user_id'})
     user: UserEntity
 
-    @ManyToOne(() => PlaylistEntity, playlist => playlist.songs)
+    @ManyToOne(() => PlaylistEntity, playlist => playlist.songs, {onDelete: 'SET NULL'})
     playlist: PlaylistEntity
 
-    @OneToMany(() => CommentEntity, comment => comment.song)
+    @OneToMany(() => CommentEntity, comment => comment.song, {onDelete: 'CASCADE'})
     comments: CommentEntity[]
 }

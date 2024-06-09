@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, Put, Post, Body, Delete, ValidationPipe, UsePipes } from '@nestjs/common';
+import { Controller, Get, Param, Query, Put, Post, Body, Delete, ValidationPipe, UsePipes, Patch } from '@nestjs/common';
 import { SongService } from './song.service';
 import { Auth } from 'src/decorators/auth.decorator';
 import { CurrentUser } from 'src/decorators/user.decorator';
@@ -25,8 +25,6 @@ export class SongController {
   }
 
   @Get(':id')
-  @Post()
-  @Auth()
   async getSong(@Param('id') id: string){
     return this.songService.byId(+id)
   }
@@ -38,7 +36,7 @@ export class SongController {
   }
 
   @UsePipes(new ValidationPipe())
-  @Put(':id')
+  @Patch(':id')
   @Auth()
   async updateSong(
     @Param('id') id: string,
@@ -53,15 +51,17 @@ export class SongController {
     return this.songService.deleteSong(+id)
   }
 
-  @Put('update-listens/:songId')
-  @Auth()
+  @Put('update-listens/:songId')  
   async updateListens(@Param('songId') songId: string) {
     return this.songService.updateCountListens(+songId)
   }
 
   @Put('update-likes/:songId')
   @Auth()
-  async updateLikes(@Param('songId') songId: string) {
-    return this.songService.updateReaction(+songId)
+  async updateLikes(
+    @Param('songId') songId: string,
+    @Param('isLiked') isLiked: boolean
+  ) {
+    return this.songService.updateReaction(+songId, isLiked)
   }
 }

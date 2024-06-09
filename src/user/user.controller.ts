@@ -15,7 +15,7 @@ export class UserController {
   }
 
   @Get('by-id/:id')
-  @Auth()
+  // @Auth()
   async getUser(@Param('id') id: string) {
       return this.userService.byId(+id)
   }
@@ -34,7 +34,7 @@ export class UserController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Auth()
-  @Patch('subscribe/:artistId')
+  @Put('subscribe/:artistId')
   async subscribeToArtist(
     @CurrentUser('id') id: string,
     @Param('artistId') artistId: string
@@ -47,7 +47,6 @@ export class UserController {
     return this.userService.getAllUsers()
   }
 
-  // Admin
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Auth()

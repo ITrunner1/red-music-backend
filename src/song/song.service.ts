@@ -1,29 +1,31 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhereProperty, ILike, MoreThan, Repository } from 'typeorm';
+import { FindOptionsWhereProperty, ILike, Like, MoreThan, Repository } from 'typeorm';
 import { hash } from 'argon2';
 import { SongEntity } from 'src/song/song.entity';
 import { SongDto } from './song.dto';
+import { PlaylistService } from 'src/playlist/playlist.service';
 
 @Injectable()
 export class SongService {
-    constructor(       
+    constructor(
         @InjectRepository(SongEntity)
         private readonly songRepository: Repository<SongEntity>,
-    ) {}
+    ) { }
 
     async byId(id: number, isPublic = false) {
         const song = await this.songRepository.findOne({
             where: isPublic ? {
-            id, isPublic: true
+                id, isPublic: true
             } : {
-            id 
+                id
             },
             relations: {
                 user: true,
                 comments: {
                     user: true,
-                }
+                },
+                playlist: true
             },
             select: {
                 user: {
@@ -34,38 +36,42 @@ export class SongService {
                     subscribersCount: true,
                     subscriptions: true,
                 },
-            comments: {
+                comments: {
                     text: true,
                     id: true,
                     user: {
-                    id: true,
-                    name: true,
-                    avatarPath: true,
-                    isVerified: true,
-                    subscribersCount: true,
+                        id: true,
+                        name: true,
+                        avatarPath: true,
+                        isVerified: true,
+                        subscribersCount: true,
                     }
+                },
+                playlist: {
+                    name: true,
+                    id: true,
                 }
-            }       
-        }) 
-        
-        if(!song) throw new NotFoundException('Song not found')
+            }
+        })
 
-        return song        
+        if (!song) throw new NotFoundException('Song not found')
+
+        return song
     }
 
     async getAllSongs(searchTerm?: string) {
         let options: FindOptionsWhereProperty<SongEntity> = {}
 
-        if(searchTerm)
+        if (searchTerm)
             options = {
-                name: ILike(`${searchTerm}`)
+                name: ILike(`%${searchTerm}%`)
             }
         return this.songRepository.find({
             where: {
                 ...options,
                 isPublic: true
             },
-            order: { 
+            order: {
                 createdAt: 'DESC'
             },
             relations: {
@@ -85,13 +91,13 @@ export class SongService {
         })
     }
 
-    async getMostPopularByListens(){
+    async getMostPopularByListens() {
         return this.songRepository.find({
             where: {
                 listens: MoreThan(0)
             },
             relations: {
-                user: true,                
+                user: true,
             },
             select: {
                 user: {
@@ -113,16 +119,15 @@ export class SongService {
         return this.songRepository.save({
             ...song, ...dto
         })
-        
-    }   
+    }
 
-    async createSong(userId:number) {
+    async createSong(userId: number) {
         const defaultValues = {
             name: '',
             user: { id: userId },
             songPath: '',
-            description: '',
-            thumbnailPath: ''
+            lyrics: '',
+            thumbnailPath: '',
         }
 
         const newSong = this.songRepository.create(defaultValues)
@@ -130,22 +135,30 @@ export class SongService {
         return song.id
     }
 
-    async deleteSong(id:number){
+    async deleteSong(id: number) {
         return this.songRepository.delete(id)
     }
 
-    async updateCountListens(id: number){
+    async updateCountListens(id: number) {
         const song = await this.byId(id)
         song.listens++
-        
+
         return this.songRepository.save(song)
     }
 
-    async updateReaction(id: number){
+    async updateReaction(id: number, isLiked: boolean) {
         const song = await this.byId(id)
-        song.likes++
         
-        return this.songRepository.save(song)
+        if (!isLiked) {
+            song.likes++
+            this.songRepository.save(song)
+
+            return true
+        }
+
+        song.likes--
+        this.songRepository.save(song)
+        return false
     }
 }
 

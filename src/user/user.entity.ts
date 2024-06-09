@@ -28,18 +28,18 @@ export class UserEntity extends Base {
     @Column({default:'', name: 'avatar_path'})
     avatarPath: string
 
-    @OneToMany(() => SongEntity, song => song.user)
+    @OneToMany(() => SongEntity, song => song.user, {onDelete: 'CASCADE'})
     songs: SongEntity[]
 
-    @OneToMany(() => PlaylistEntity, playlist => playlist.user)
+    @OneToMany(() => PlaylistEntity, playlist => playlist.user, {onDelete: 'CASCADE'})
     playlists: PlaylistEntity[]
 
-    @OneToMany(() => CommentEntity, comment => comment.user)
+    @OneToMany(() => CommentEntity, comment => comment.user, {onDelete: 'CASCADE'})
     comments: SongEntity[]
 
-    @OneToMany(() => SubscriptionEntity, sub => sub.fromUser)
+    @OneToMany(() => SubscriptionEntity, sub => sub.fromUser, {onDelete: 'CASCADE'})
     subscriptions: SubscriptionEntity[]
 
-    @OneToMany(() => SubscriptionEntity, sub => sub.toArtist)
+    @OneToMany(() => SubscriptionEntity, sub => sub.toArtist, {onDelete: 'CASCADE'})
     subscribers: SubscriptionEntity[]
 }

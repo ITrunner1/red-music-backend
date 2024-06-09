@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { AuthDto } from './dto/auth.dto';
+import { AuthDto, RegisterDto } from './dto/auth.dto';
 import { hash, verify } from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -40,7 +40,7 @@ export class AuthService {
         }    
     }
 
-    async register(dto: AuthDto) {        
+    async register(dto: RegisterDto) {        
         const existUser = await this.userRepository.findOne({
             where: {
                 email: dto.email 
@@ -51,7 +51,8 @@ export class AuthService {
         
         const newUser = this.userRepository.create({
             email: dto.email,
-            password: await hash(dto.password)
+            password: await hash(dto.password),
+            name: dto.name
         })
 
         const tokens = await this.issueTokens(newUser.id)

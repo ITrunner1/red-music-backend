@@ -1,4 +1,4 @@
-import { IsString } from "class-validator"
+import { IsNumber, IsString } from "class-validator"
 
 export class SongDto {
     @IsString()
@@ -10,5 +10,5 @@ export class SongDto {
     audioPath: string
 
     @IsString()
-    thumbnailPath: string
+    thumbnailPath: string    
 }
