@@ -5,7 +5,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: [
-      'http://localhost:3000', 'https://89.248.206.108:3000', 'https://89.248.206.108:3000',
+      'http://localhost:3000', 'http://89.248.206.108:3000', 'https://89.248.206.108:3000',
     ],
     credentials: true,
     exposedHeaders: 'set-cookie'
