@@ -94,7 +94,8 @@ export class SongService {
     async getMostPopularByListens() {
         return this.songRepository.find({
             where: {
-                listens: MoreThan(0)
+                listens: MoreThan(0),
+                isPublic: true
             },
             relations: {
                 user: true,

@@ -18,7 +18,7 @@ export class UserService {
   async byId(id: number) {
     const user = await this.userRepository.findOne({
       where: {
-        id,
+        id,    
       },
       relations: {
         songs: true,
@@ -28,7 +28,7 @@ export class UserService {
         playlists: true
       },
       order: {
-        createdAt: 'DESC'
+        createdAt: 'DESC'        
       }
     })
 
