@@ -59,9 +59,9 @@ export class SongController {
   @Put('update-likes/:songId')
   @Auth()
   async updateLikes(
-    @Param('songId') songId: string,
-    @Param('isLiked') isLiked: boolean
+    @CurrentUser('id') id: string,
+    @Param('songId') songId: string
   ) {
-    return this.songService.updateReaction(+songId, isLiked)
+    return this.songService.updateReaction(+id, +songId)
   }
 }

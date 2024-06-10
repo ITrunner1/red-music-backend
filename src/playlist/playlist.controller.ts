@@ -51,4 +51,18 @@ export class PlaylistController {
   async deletePlaylist(@Param('id') id: string) {
     return this.playlistService.deletePlaylist(+id)
   }
+
+  @Put('update-listens/:playlistId')
+  async updateListens(@Param('playlistId') playlistId: string) {
+    return this.playlistService.updateCountListens(+playlistId)
+  }
+
+  @Put('update-likes/:playlistId')
+  @Auth()
+  async updateLikes(
+    @CurrentUser('id') id: string,
+    @Param('playlistId') playlistId: string
+  ) {
+    return this.playlistService.updateReaction(+id, +playlistId)
+  }
 }

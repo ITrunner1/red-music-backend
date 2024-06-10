@@ -2,6 +2,7 @@ import { SongEntity } from "src/song/song.entity";
 import { UserEntity } from "src/user/user.entity";
 import { Base } from "src/utils/base";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { LikePlaylistEntity } from "./likePlaylist.entity";
 
 @Entity('Playlists')
 export class PlaylistEntity extends Base {
@@ -18,10 +19,20 @@ export class PlaylistEntity extends Base {
     @Column({ default: false, name: 'is_public' })
     isPublic: boolean
 
+    @Column({ default: 0 })
+    listens?: number
+
+    @Column({ default: 0 })
+    likes?: number
+
     @ManyToOne(() => UserEntity, user => user.playlists, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     user: UserEntity
 
-    @OneToMany(() => SongEntity, songs => songs.playlist, { onDelete: 'SET NULL' })
+    @OneToMany(() => SongEntity, playlist => playlist.playlist, { onDelete: 'SET NULL' })
     songs: SongEntity[]
+
+    @OneToMany(() => LikePlaylistEntity, likePl => likePl.likedPlaylist, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'liked_playlist'})
+    likedPlaylist: LikePlaylistEntity[]
 }

@@ -4,12 +4,15 @@ import { PlaylistEntity } from './playlist.entity';
 import { PlaylistDto } from './playlist.dto';
 import { FindOptionsWhereProperty, ILike, Repository } from 'typeorm';
 import { SongDto } from 'src/song/song.dto';
+import { LikePlaylistEntity } from './likePlaylist.entity';
 
 @Injectable()
 export class PlaylistService {
   constructor(
     @InjectRepository(PlaylistEntity)
     private readonly playlistRepository: Repository<PlaylistEntity>,
+    @InjectRepository(LikePlaylistEntity)
+    private readonly likePlaylistRepository: Repository<LikePlaylistEntity>,
   ) { }
 
   async getPlaylistById(id: number, isPublic = false) {
@@ -105,5 +108,39 @@ export class PlaylistService {
 
   async deletePlaylist(id: number) {
     return this.playlistRepository.delete(id)
+  }
+
+  async updateCountListens(id: number) {
+    const playlist = await this.getPlaylistById(id)
+    playlist.listens++
+
+    return this.playlistRepository.save(playlist)
+  }
+
+  async updateReaction(id: number, playlistId: number) {
+    const playlist = await this.getPlaylistById(playlistId)
+    const data = {
+      likedPlaylist: { id: playlistId },
+      userId: { id }
+    }
+
+    const isLiked = await this.likePlaylistRepository.findOneBy(data)
+
+    if (!isLiked) {
+      const newLike = this.likePlaylistRepository.create(data)
+      this.likePlaylistRepository.save((newLike))
+
+      playlist.likes++
+      this.playlistRepository.save(playlist)
+
+      return true
+    }
+
+    this.likePlaylistRepository.delete(data)
+
+    playlist.likes--
+    this.playlistRepository.save(playlist)    
+
+    return false
   }
 }

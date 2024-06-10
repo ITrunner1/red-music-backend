@@ -1,9 +1,11 @@
 import { SongEntity } from "src/song/song.entity";
 import { Base } from "src/utils/base";
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany } from "typeorm";
 import { SubscriptionEntity } from "./subscription.entity";
 import { PlaylistEntity } from "src/playlist/playlist.entity";
 import { CommentEntity } from "src/comment/comment.entity";
+import { LikePlaylistEntity } from "src/playlist/likePlaylist.entity";
+import { LikeSongEntity } from "src/song/likeSong.entity";
 
 @Entity('User')
 export class UserEntity extends Base {
@@ -42,4 +44,10 @@ export class UserEntity extends Base {
 
     @OneToMany(() => SubscriptionEntity, sub => sub.toArtist, { onDelete: 'CASCADE' })
     subscribers: SubscriptionEntity[]
+
+    @OneToMany(() => LikePlaylistEntity, sub => sub.userId, { onDelete: 'CASCADE' })
+    likedPlaylists: LikePlaylistEntity[]
+
+    @OneToMany(() => LikeSongEntity, sub => sub.userId, { onDelete: 'CASCADE' })
+    likedSongs: LikeSongEntity[]
 }

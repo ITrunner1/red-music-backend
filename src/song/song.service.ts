@@ -4,13 +4,15 @@ import { FindOptionsWhereProperty, ILike, Like, MoreThan, Repository } from 'typ
 import { hash } from 'argon2';
 import { SongEntity } from 'src/song/song.entity';
 import { SongDto } from './song.dto';
-import { PlaylistService } from 'src/playlist/playlist.service';
+import { LikeSongEntity } from './likeSong.entity';
 
 @Injectable()
 export class SongService {
     constructor(
         @InjectRepository(SongEntity)
         private readonly songRepository: Repository<SongEntity>,
+        @InjectRepository(LikeSongEntity)
+        private readonly likeSongRepository: Repository<LikeSongEntity>,
     ) { }
 
     async byId(id: number, isPublic = false) {
@@ -147,20 +149,32 @@ export class SongService {
         return this.songRepository.save(song)
     }
 
-    async updateReaction(id: number, isLiked: boolean) {
-        const song = await this.byId(id)
-
-        if (!isLiked) {
-            song.likes++
-            this.songRepository.save(song)
-
-            return true
+    async updateReaction(id: number, songId: number) {
+        const song = await this.byId(songId)
+        const data = {
+          likedSong: { id: songId },
+          userId: { id }
         }
-
+    
+        const isLiked = await this.likeSongRepository.findOneBy(data)
+    
+        if (!isLiked) {
+          const newLike = this.likeSongRepository.create(data)
+          this.likeSongRepository.save((newLike))
+    
+          song.likes++
+          this.songRepository.save(song)
+    
+          return true
+        }
+    
+        this.likeSongRepository.delete(data)
+    
         song.likes--
-        this.songRepository.save(song)
+        this.songRepository.save(song)    
+    
         return false
-    }
+      }
 }
 
 

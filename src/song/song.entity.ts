@@ -3,6 +3,7 @@ import { PlaylistEntity } from "src/playlist/playlist.entity";
 import { UserEntity } from "src/user/user.entity";
 import { Base } from "src/utils/base";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { LikeSongEntity } from "./likeSong.entity";
 
 @Entity('Song')
 export class SongEntity extends Base {
@@ -39,5 +40,9 @@ export class SongEntity extends Base {
     playlist: PlaylistEntity
 
     @OneToMany(() => CommentEntity, comment => comment.song, { onDelete: 'CASCADE' })
-    comments: CommentEntity[]
+    comments: CommentEntity[]   
+
+    @OneToMany(() => LikeSongEntity, like => like.likedSong, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'liked_song'})
+    likedSong: LikeSongEntity[]
 }

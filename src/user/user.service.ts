@@ -25,6 +25,12 @@ export class UserService {
         subscriptions: {
           toArtist: true,
         },
+        likedPlaylists: {
+          likedPlaylist: true,
+        },
+        likedSongs: {
+          likedSong: true,
+        },
         playlists: true
       },
       order: {
