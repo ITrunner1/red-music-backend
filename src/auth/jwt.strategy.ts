@@ -14,11 +14,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly userRepository: Repository<UserEntity>
   ) {
     super({
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        ignoreExpiration: true,
-        secretOrKey: configService.get('JWT_SECRET')
-      });
-    }; 
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: true,
+      secretOrKey: configService.get('JWT_SECRET')
+    });
+  };
 
   async validate({ id }: Pick<UserEntity, 'id'>) {
     return this.userRepository.findOne({ where: { id: +id } })

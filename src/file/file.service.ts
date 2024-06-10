@@ -4,7 +4,7 @@ import { FileResponse } from './file.interface';
 import { ensureDir, writeFile } from 'fs-extra';
 
 @Injectable()
-export class FileService {    
+export class FileService {
     async saveFiles(
         mediaFile: Express.Multer.File,
         folder = 'default'

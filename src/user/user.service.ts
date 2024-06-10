@@ -18,7 +18,7 @@ export class UserService {
   async byId(id: number) {
     const user = await this.userRepository.findOne({
       where: {
-        id,    
+        id,
       },
       relations: {
         songs: true,
@@ -28,7 +28,7 @@ export class UserService {
         playlists: true
       },
       order: {
-        createdAt: 'DESC'        
+        createdAt: 'DESC'
       }
     })
 
@@ -72,16 +72,16 @@ export class UserService {
       const newSubscription = this.subscriptionRepository.create(data)
       this.subscriptionRepository.save((newSubscription))
 
-      user.subscribersCount++  
+      user.subscribersCount++
       this.userRepository.save(user)
-      
+
       return true
-    }  
+    }
 
     this.subscriptionRepository.delete(data)
 
     this.userRepository.save(user)
-    user.subscribersCount-- 
+    user.subscribersCount--
 
     return false
   }

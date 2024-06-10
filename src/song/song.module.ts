@@ -10,4 +10,4 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [TypeOrmModule.forFeature([SongEntity])],
   exports: [SongService, TypeOrmModule.forFeature([SongEntity])]
 })
-export class SongModule {}
+export class SongModule { }

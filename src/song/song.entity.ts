@@ -6,38 +6,38 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 
 @Entity('Song')
 export class SongEntity extends Base {
-  
-    @Column({default:''})
-    name: string   
 
-    @Column({default: false, name: 'is_public'})
-    isPublic: boolean  
+    @Column({ default: '' })
+    name: string
 
-    @Column({default:0})
+    @Column({ default: false, name: 'is_public' })
+    isPublic: boolean
+
+    @Column({ default: 0 })
     listens?: number
 
-    @Column({default:0})
+    @Column({ default: 0 })
     likes?: number
 
-    @Column({default:0})
+    @Column({ default: 0 })
     duration?: number
 
-    @Column({default:'', type: 'text'})
+    @Column({ default: '', type: 'text' })
     lyrics: string
 
-    @Column({default:'', name: 'audio_path'})
+    @Column({ default: '', name: 'audio_path' })
     audioPath: string
 
-    @Column({default:'', name: 'thumbnail_path'})
+    @Column({ default: '', name: 'thumbnail_path' })
     thumbnailPath: string
 
-    @ManyToOne(() => UserEntity, user => user.songs, {onDelete: 'CASCADE'})
-    @JoinColumn({name: 'user_id'})
+    @ManyToOne(() => UserEntity, user => user.songs, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'user_id' })
     user: UserEntity
 
-    @ManyToOne(() => PlaylistEntity, playlist => playlist.songs, {onDelete: 'SET NULL'})
+    @ManyToOne(() => PlaylistEntity, playlist => playlist.songs, { onDelete: 'SET NULL' })
     playlist: PlaylistEntity
 
-    @OneToMany(() => CommentEntity, comment => comment.song, {onDelete: 'CASCADE'})
+    @OneToMany(() => CommentEntity, comment => comment.song, { onDelete: 'CASCADE' })
     comments: CommentEntity[]
 }

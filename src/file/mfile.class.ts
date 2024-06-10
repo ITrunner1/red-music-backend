@@ -3,7 +3,7 @@ export class MFile {
     mimetype: string;
     originalname: string;
 
-    constructor(file: Express.Multer.File | MFile){
+    constructor(file: Express.Multer.File | MFile) {
         this.buffer = file.buffer;
         this.mimetype = file.mimetype;
         this.originalname = file.originalname;

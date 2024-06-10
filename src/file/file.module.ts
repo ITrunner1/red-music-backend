@@ -14,5 +14,5 @@ import { FileController } from './file.controller';
   ],
   controllers: [FileController]
 })
-export class FileModule {}
+export class FileModule { }
 

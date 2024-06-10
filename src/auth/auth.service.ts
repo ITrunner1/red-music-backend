@@ -10,9 +10,9 @@ import { Repository } from 'typeorm';
 export class AuthService {
     constructor(
         @InjectRepository(UserEntity)
-        private readonly userRepository: Repository<UserEntity>, 
-        private jwt:JwtService
-    ) {}
+        private readonly userRepository: Repository<UserEntity>,
+        private jwt: JwtService
+    ) { }
 
     async login(dto: AuthDto) {
         const user = await this.validateUser(dto)
@@ -26,10 +26,12 @@ export class AuthService {
 
     async getNewTokens(refreshToken: string) {
         const result = await this.jwt.verifyAsync(refreshToken)
-        if(!result) throw new UnauthorizedException('Invalid fresh token')
-        
-        const user = await this.userRepository.findOne({where: {
-            id: result.id }
+        if (!result) throw new UnauthorizedException('Invalid fresh token')
+
+        const user = await this.userRepository.findOne({
+            where: {
+                id: result.id
+            }
         })
 
         const tokens = await this.issueTokens(user.id)
@@ -37,18 +39,18 @@ export class AuthService {
         return {
             user: this.returnUserFields(user),
             ...tokens
-        }    
+        }
     }
 
-    async register(dto: RegisterDto) {        
+    async register(dto: RegisterDto) {
         const existUser = await this.userRepository.findOne({
             where: {
-                email: dto.email 
-              } 
-        }) 
-        
-        if (existUser) throw new BadRequestException('User already exist')  
-        
+                email: dto.email
+            }
+        })
+
+        if (existUser) throw new BadRequestException('User already exist')
+
         const newUser = this.userRepository.create({
             email: dto.email,
             password: await hash(dto.password),
@@ -58,16 +60,16 @@ export class AuthService {
         const tokens = await this.issueTokens(newUser.id)
 
         const user = await this.userRepository.save(newUser)
-        
+
         return {
             user: this.returnUserFields(user),
             ...tokens
-        }        
-    }    
+        }
+    }
 
     // Генерация 2-ух токенов
     private async issueTokens(userId: number) {
-        const data = {id: userId}
+        const data = { id: userId }
 
         const accessToken = this.jwt.sign(data, {
             expiresIn: '1',
@@ -80,26 +82,26 @@ export class AuthService {
         return { accessToken, refreshToken }
     }
 
-    private returnUserFields(user: UserEntity){
-        return{
+    private returnUserFields(user: UserEntity) {
+        return {
             id: user.id,
-            email: user.email,           
-        }  
-    }   
+            email: user.email,
+        }
+    }
 
-    private async validateUser(dto:AuthDto){
+    private async validateUser(dto: AuthDto) {
         const user = await this.userRepository.findOne({
-            where: { 
+            where: {
                 email: dto.email
             }
         })
 
         if (!user) throw new NotFoundException('User not found')
-        
+
         const isValid = await verify(user.password, dto.password)
 
-        if(!isValid) throw new UnauthorizedException('Invalid password')
-        
+        if (!isValid) throw new UnauthorizedException('Invalid password')
+
         return user
     }
 }

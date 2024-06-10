@@ -6,22 +6,22 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 @Entity('Playlists')
 export class PlaylistEntity extends Base {
 
-    @Column({default:'', type: 'text'})
+    @Column({ default: '', type: 'text' })
     name: string
 
-    @Column({default:'', name: 'description'})
+    @Column({ default: '', name: 'description' })
     description: string
 
-    @Column({default:'', name: 'picture_path'})
+    @Column({ default: '', name: 'picture_path' })
     picturePath: string
 
-    @Column({default: false, name: 'is_public'})
-    isPublic: boolean 
+    @Column({ default: false, name: 'is_public' })
+    isPublic: boolean
 
-    @ManyToOne(() => UserEntity, user => user.playlists, {onDelete: 'CASCADE'})
-    @JoinColumn({ name:'user_id' })
+    @ManyToOne(() => UserEntity, user => user.playlists, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'user_id' })
     user: UserEntity
-    
-    @OneToMany(() => SongEntity, songs => songs.playlist, {onDelete: 'SET NULL'})
+
+    @OneToMany(() => SongEntity, songs => songs.playlist, { onDelete: 'SET NULL' })
     songs: SongEntity[]
 }

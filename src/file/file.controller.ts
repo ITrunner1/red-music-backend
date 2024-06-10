@@ -4,9 +4,9 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { Controller, HttpCode, Post, Query, UploadedFile, UseInterceptors } from "@nestjs/common";
 
 
-@Controller('file') 
+@Controller('file')
 export class FileController {
-    constructor(private readonly fileService: FileService) {}
+    constructor(private readonly fileService: FileService) { }
 
     @HttpCode(200)
     @Post()

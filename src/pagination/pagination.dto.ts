@@ -4,6 +4,7 @@ export class PaginationDto {
      @IsOptional()
      @IsString()
      page?: string
+     
      @IsOptional()
      @IsString()
      perPage?: string

@@ -7,26 +7,26 @@ import { SongDto } from 'src/song/song.dto';
 
 @Controller('playlists')
 export class PlaylistController {
-  constructor(private readonly playlistService: PlaylistService) {}
+  constructor(private readonly playlistService: PlaylistService) { }
 
   @Get()
   async getAllPlaylists(@Query('searchTerm') searchTerm?: string) {
-      return this.playlistService.getAllPlaylists(searchTerm)
+    return this.playlistService.getAllPlaylists(searchTerm)
   }
 
   @Get()
   async getAllUserPlaylists(@Query('searchTerm') searchTerm?: string) {
-      return this.playlistService.getAllPlaylists(searchTerm)
+    return this.playlistService.getAllPlaylists(searchTerm)
   }
 
   @Get('playlists/profile')
   @Auth()
   async getPrivatePlaylist(@CurrentUser('id') id: number) {
-      return this.playlistService.getPlaylistById(+id)
-  }  
+    return this.playlistService.getPlaylistById(+id)
+  }
 
   @Get(':id')
-  async getPlaylist(@Param('id') id: string){
+  async getPlaylist(@Param('id') id: string) {
     return this.playlistService.getPlaylistById(+id)
   }
 

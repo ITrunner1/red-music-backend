@@ -10,4 +10,4 @@ import { SubscriptionEntity } from './subscription.entity';
   providers: [UserService],
   imports: [TypeOrmModule.forFeature([UserEntity, SubscriptionEntity])]
 })
-export class UserModule {}
+export class UserModule { }

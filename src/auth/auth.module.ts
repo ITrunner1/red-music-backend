@@ -27,4 +27,4 @@ import { PassportModule } from '@nestjs/passport';
     TypeOrmModule.forFeature([UserEntity])
   ]
 })
-export class AuthModule {}
+export class AuthModule { }

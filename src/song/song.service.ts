@@ -149,7 +149,7 @@ export class SongService {
 
     async updateReaction(id: number, isLiked: boolean) {
         const song = await this.byId(id)
-        
+
         if (!isLiked) {
             song.likes++
             this.songRepository.save(song)

@@ -5,15 +5,15 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 
 @Entity('Comment')
 export class CommentEntity extends Base {
-  
-    @Column({default:'', type: 'text'})
+
+    @Column({ default: '', type: 'text' })
     text: string
 
     @ManyToOne(() => UserEntity, user => user.songs, { onDelete: 'CASCADE' })
-    @JoinColumn({name: 'user_id'})
+    @JoinColumn({ name: 'user_id' })
     user: UserEntity
 
-    @ManyToOne(() => SongEntity, song => song.comments, { onDelete: 'CASCADE'})
-    @JoinColumn({name: 'song_id'})
+    @ManyToOne(() => SongEntity, song => song.comments, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'song_id' })
     song: SongEntity
 }

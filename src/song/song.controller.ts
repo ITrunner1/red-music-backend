@@ -6,26 +6,26 @@ import { SongDto } from './song.dto';
 
 @Controller('songs')
 export class SongController {
-  constructor(private readonly songService: SongService) {}
+  constructor(private readonly songService: SongService) { }
 
   @Get()
   async getAllSongs(@Query('searchTerm') searchTerm?: string) {
-      return this.songService.getAllSongs(searchTerm)
+    return this.songService.getAllSongs(searchTerm)
   }
 
   @Get('song/profile')
   @Auth()
   async getPrivateSong(@CurrentUser('id') id: number) {
-      return this.songService.byId(+id)
-  }  
+    return this.songService.byId(+id)
+  }
 
-  @Get('most-popular')  
+  @Get('most-popular')
   async getMostPopularByListens() {
-      return this.songService.getMostPopularByListens()
+    return this.songService.getMostPopularByListens()
   }
 
   @Get(':id')
-  async getSong(@Param('id') id: string){
+  async getSong(@Param('id') id: string) {
     return this.songService.byId(+id)
   }
 
@@ -51,7 +51,7 @@ export class SongController {
     return this.songService.deleteSong(+id)
   }
 
-  @Put('update-listens/:songId')  
+  @Put('update-listens/:songId')
   async updateListens(@Param('songId') songId: string) {
     return this.songService.updateCountListens(+songId)
   }

@@ -10,5 +10,5 @@ export class SongDto {
     audioPath: string
 
     @IsString()
-    thumbnailPath: string    
+    thumbnailPath: string
 }

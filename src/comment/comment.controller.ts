@@ -6,7 +6,7 @@ import { Auth } from 'src/decorators/auth.decorator';
 
 @Controller('comment')
 export class CommentController {
-  constructor(private readonly commentService: CommentService) {}
+  constructor(private readonly commentService: CommentService) { }
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
