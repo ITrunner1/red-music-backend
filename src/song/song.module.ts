@@ -4,10 +4,11 @@ import { SongController } from './song.controller';
 import { SongEntity } from './song.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LikeSongEntity } from './likeSong.entity';
+import { PaginationService } from 'src/pagination/pagination.service';
 
 @Module({
   controllers: [SongController],
-  providers: [SongService],
+  providers: [SongService, PaginationService],
   imports: [TypeOrmModule.forFeature([SongEntity, LikeSongEntity])]  
 })
 export class SongModule { }
