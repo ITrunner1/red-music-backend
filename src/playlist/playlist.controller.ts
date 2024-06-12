@@ -4,19 +4,15 @@ import { Auth } from 'src/decorators/auth.decorator';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { PlaylistDto } from './playlist.dto';
 import { SongDto } from 'src/song/song.dto';
+import { GetAll } from 'src/song/getAll.dto';
 
 @Controller('playlists')
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService) { }
 
   @Get()
-  async getAllPlaylists(@Query('searchTerm') searchTerm?: string) {
-    return this.playlistService.getAllPlaylists(searchTerm)
-  }
-
-  @Get()
-  async getAllUserPlaylists(@Query('searchTerm') searchTerm?: string) {
-    return this.playlistService.getAllPlaylists(searchTerm)
+  async getAllPlaylists(@Query() queryDto: GetAll) {
+    return this.playlistService.getAllPlaylists(queryDto)
   }
 
   @Get('playlists/profile')

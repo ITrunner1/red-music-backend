@@ -5,11 +5,11 @@ import { SongEntity } from "./song.entity";
 
 @Entity('Liked_Songs')
 export class LikeSongEntity extends Base {
-    @ManyToOne(() => UserEntity, user => user.likedSongs)
+    @ManyToOne(() => UserEntity, user => user.likedSongs, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     userId: UserEntity
 
-    @ManyToOne(() => SongEntity, user => user.likedSong)
+    @ManyToOne(() => SongEntity, user => user.likedSong, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'liked_song' })
     likedSong: SongEntity
 }

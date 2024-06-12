@@ -1,11 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhereProperty, ILike, Like, MoreThan, Repository } from 'typeorm';
-import { hash } from 'argon2';
+import { FindOptionsWhereProperty, ILike, MoreThan, Repository } from 'typeorm';
 import { SongEntity } from 'src/song/song.entity';
 import { SongDto } from './song.dto';
 import { LikeSongEntity } from './likeSong.entity';
-import { GetAllSongs } from './getAll.dto';
+import { GetAll } from './getAll.dto';
 import { PaginationService } from 'src/pagination/pagination.service';
 
 @Injectable()
@@ -64,7 +63,7 @@ export class SongService {
         return song
     }
 
-    async getAllSongs(dto: GetAllSongs) {
+    async getAllSongs(dto: GetAll) {
         let options: FindOptionsWhereProperty<SongEntity> = {}
         const { searchTerm } = dto
 
@@ -111,7 +110,7 @@ export class SongService {
         }
     }
 
-    async getMostPopularByListens() {
+    async getMostPopularByListens() {        
         return this.songRepository.find({
             where: {
                 listens: MoreThan(0),

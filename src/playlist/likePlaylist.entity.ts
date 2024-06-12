@@ -5,11 +5,11 @@ import { PlaylistEntity } from "./playlist.entity";
 
 @Entity('Liked_Playlists')
 export class LikePlaylistEntity extends Base {
-    @ManyToOne(() => UserEntity, user => user.likedPlaylists)
+    @ManyToOne(() => UserEntity, user => user.likedPlaylists, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     userId: UserEntity
 
-    @ManyToOne(() => PlaylistEntity, user => user.likedPlaylist)
+    @ManyToOne(() => PlaylistEntity, user => user.likedPlaylist, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'liked_playlist' })
     likedPlaylist: PlaylistEntity
 }

@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PlaylistEntity } from './playlist.entity';
-import { PlaylistDto } from './playlist.dto';
 import { FindOptionsWhereProperty, ILike, Repository } from 'typeorm';
-import { SongDto } from 'src/song/song.dto';
+import { PlaylistDto } from 'src/playlist/playlist.dto';
 import { LikePlaylistEntity } from './likePlaylist.entity';
+import { PaginationService } from 'src/pagination/pagination.service';
+import { GetAll } from 'src/song/getAll.dto';
 
 @Injectable()
 export class PlaylistService {
@@ -13,6 +14,7 @@ export class PlaylistService {
     private readonly playlistRepository: Repository<PlaylistEntity>,
     @InjectRepository(LikePlaylistEntity)
     private readonly likePlaylistRepository: Repository<LikePlaylistEntity>,
+    private readonly paginationService: PaginationService
   ) { }
 
   async getPlaylistById(id: number, isPublic = false) {
@@ -55,14 +57,18 @@ export class PlaylistService {
     return playlist
   }
 
-  async getAllPlaylists(searchTerm?: string) {
+  async getAllPlaylists(dto: GetAll) {
     let options: FindOptionsWhereProperty<PlaylistEntity> = {}
+    const { searchTerm } = dto
 
     if (searchTerm)
       options = {
-        name: ILike(`${searchTerm}`)
+        name: ILike(`%${searchTerm}%`)
       }
-    return this.playlistRepository.find({
+
+    const { perPage, skip } = this.paginationService.getPagination(dto)
+
+    const playlists = await this.playlistRepository.find({
       where: {
         ...options,
         isPublic: true
@@ -72,8 +78,9 @@ export class PlaylistService {
       },
       relations: {
         user: true,
-        songs: true,
       },
+      skip,
+      take: perPage,
       select: {
         user: {
           id: true,
@@ -83,6 +90,15 @@ export class PlaylistService {
         },
       }
     })
+
+    return {
+      playlists, length: await this.playlistRepository.count({
+        where: {
+          ...options,
+          isPublic: true
+        }
+      })
+    }
   }
 
   async createPlaylist(userId: number) {
@@ -139,7 +155,7 @@ export class PlaylistService {
     this.likePlaylistRepository.delete(data)
 
     playlist.likes--
-    this.playlistRepository.save(playlist)    
+    this.playlistRepository.save(playlist)
 
     return false
   }

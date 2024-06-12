@@ -3,14 +3,14 @@ import { SongService } from './song.service';
 import { Auth } from 'src/decorators/auth.decorator';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { SongDto } from './song.dto';
-import { GetAllSongs } from './getAll.dto';
+import { GetAll } from './getAll.dto';
 
 @Controller('songs')
 export class SongController {
   constructor(private readonly songService: SongService) { }
 
   @Get()
-  async getAllSongs(@Query() queryDto: GetAllSongs ) {
+  async getAllSongs(@Query() queryDto: GetAll ) {
     return this.songService.getAllSongs(queryDto)
   }
 

@@ -4,10 +4,11 @@ import { PlaylistController } from './playlist.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PlaylistEntity } from './playlist.entity';
 import { LikePlaylistEntity } from './likePlaylist.entity';
+import { PaginationService } from 'src/pagination/pagination.service';
 
 @Module({
   controllers: [PlaylistController],
-  providers: [PlaylistService],
+  providers: [PlaylistService, PaginationService],
   imports: [TypeOrmModule.forFeature([PlaylistEntity, LikePlaylistEntity])]
 })
 export class PlaylistModule { }
