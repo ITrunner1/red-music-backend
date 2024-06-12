@@ -1,4 +1,3 @@
-import { SongEntity } from "src/song/song.entity";
 import { Base } from "src/utils/base";
 import { Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { UserEntity } from "./user.entity";

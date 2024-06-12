@@ -25,7 +25,7 @@ export class AuthService {
     }
 
     async getNewTokens(refreshToken: string) {
-        const result = await this.jwt.verifyAsync(refreshToken)
+        const result = await this.jwt.verify(refreshToken)
         if (!result) throw new UnauthorizedException('Invalid fresh token')
 
         const user = await this.userRepository.findOne({
@@ -86,6 +86,7 @@ export class AuthService {
         return {
             id: user.id,
             email: user.email,
+            name: user.name
         }
     }
 

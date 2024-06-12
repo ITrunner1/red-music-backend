@@ -5,7 +5,6 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from './datasource/typeorm.module';
 import { FileModule } from './file/file.module';
 import { PlaylistModule } from './playlist/playlist.module';
-import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import { SongModule } from './song/song.module';
 import { UserModule } from './user/user.module';
@@ -19,7 +18,6 @@ import { PaginationModule } from './pagination/pagination.module';
     AuthModule,
     UserModule,
     SongModule,
-    AdminModule,
     PlaylistModule,
     FileModule,
     CommentModule,
