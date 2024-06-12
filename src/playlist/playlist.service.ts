@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PlaylistEntity } from './playlist.entity';
-import { FindOptionsWhereProperty, ILike, Repository } from 'typeorm';
+import { FindOptionsWhereProperty, ILike, MoreThan, Repository } from 'typeorm';
 import { PlaylistDto } from 'src/playlist/playlist.dto';
 import { LikePlaylistEntity } from './likePlaylist.entity';
 import { PaginationService } from 'src/pagination/pagination.service';
+import { PaginationDto } from 'src/pagination/pagination.dto';
 import { GetAll } from 'src/song/getAll.dto';
 
 @Injectable()
@@ -95,6 +96,42 @@ export class PlaylistService {
       playlists, length: await this.playlistRepository.count({
         where: {
           ...options,
+          isPublic: true
+        }
+      })
+    }
+  }
+
+  async getMostPopularByListens(dto: PaginationDto) {
+    const { perPage, skip } = this.paginationService.getPagination(dto)
+
+    const playlists = await this.playlistRepository.find({
+      where: {
+        listens: MoreThan(0),
+        isPublic: true
+      },
+      relations: {
+        user: true,
+      },
+      select: {
+        user: {
+          id: true,
+          name: true,
+          avatarPath: true,
+          isVerified: true
+        },
+      },
+      skip,
+      take: perPage,
+      order: {
+        listens: -1
+      }
+    })
+
+
+    return {
+      playlists, length: await this.playlistRepository.count({
+        where: {
           isPublic: true
         }
       })

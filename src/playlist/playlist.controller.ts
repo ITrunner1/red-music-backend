@@ -3,8 +3,8 @@ import { PlaylistService } from './playlist.service';
 import { Auth } from 'src/decorators/auth.decorator';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { PlaylistDto } from './playlist.dto';
-import { SongDto } from 'src/song/song.dto';
 import { GetAll } from 'src/song/getAll.dto';
+import { PaginationDto } from 'src/pagination/pagination.dto';
 
 @Controller('playlists')
 export class PlaylistController {
@@ -15,10 +15,9 @@ export class PlaylistController {
     return this.playlistService.getAllPlaylists(queryDto)
   }
 
-  @Get('playlists/profile')
-  @Auth()
-  async getPrivatePlaylist(@CurrentUser('id') id: number) {
-    return this.playlistService.getPlaylistById(+id)
+  @Get('most-popular')
+  async getMostPopularByListens(@Query() queryDto: PaginationDto) {
+    return this.playlistService.getMostPopularByListens(queryDto)
   }
 
   @Get(':id')
@@ -26,6 +25,13 @@ export class PlaylistController {
     return this.playlistService.getPlaylistById(+id)
   }
 
+
+  @Get('playlists/profile')
+  @Auth()
+  async getPrivatePlaylist(@CurrentUser('id') id: number) {
+    return this.playlistService.getPlaylistById(+id)
+  }
+ 
   @Post('')
   @Auth()
   async createPlaylist(@CurrentUser('id') id: number) {

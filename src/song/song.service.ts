@@ -6,6 +6,7 @@ import { SongDto } from './song.dto';
 import { LikeSongEntity } from './likeSong.entity';
 import { GetAll } from './getAll.dto';
 import { PaginationService } from 'src/pagination/pagination.service';
+import { PaginationDto } from 'src/pagination/pagination.dto';
 
 @Injectable()
 export class SongService {
@@ -110,8 +111,10 @@ export class SongService {
         }
     }
 
-    async getMostPopularByListens() {        
-        return this.songRepository.find({
+    async getMostPopularByListens(dto: PaginationDto) {
+        const { perPage, skip } = this.paginationService.getPagination(dto)
+
+        const songs = await this.songRepository.find({
             where: {
                 listens: MoreThan(0),
                 isPublic: true
@@ -127,10 +130,21 @@ export class SongService {
                     isVerified: true
                 },
             },
+            skip,
+            take: perPage,
             order: {
                 listens: -1
             }
         })
+
+
+        return {
+            songs, length: await this.songRepository.count({
+                where: {
+                    isPublic: true
+                }
+            })
+        }
     }
 
     async updateSong(id: number, dto: SongDto) {

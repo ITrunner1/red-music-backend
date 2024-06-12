@@ -4,29 +4,30 @@ import { Auth } from 'src/decorators/auth.decorator';
 import { CurrentUser } from 'src/decorators/user.decorator';
 import { SongDto } from './song.dto';
 import { GetAll } from './getAll.dto';
+import { PaginationDto } from 'src/pagination/pagination.dto';
 
 @Controller('songs')
 export class SongController {
   constructor(private readonly songService: SongService) { }
 
   @Get()
-  async getAllSongs(@Query() queryDto: GetAll ) {
+  async getAllSongs(@Query() queryDto: GetAll) {
     return this.songService.getAllSongs(queryDto)
+  }
+
+  @Get('most-popular')
+  async getMostPopularByListens(@Query() queryDto: PaginationDto) {
+    return this.songService.getMostPopularByListens(queryDto)
+  }
+
+  @Get(':id')
+  async getSong(@Param('id') id: string) {
+    return this.songService.byId(+id)
   }
 
   @Get('song/profile')
   @Auth()
   async getPrivateSong(@CurrentUser('id') id: number) {
-    return this.songService.byId(+id)
-  }
-
-  @Get('most-popular')
-  async getMostPopularByListens() {
-    return this.songService.getMostPopularByListens()
-  }
-
-  @Get(':id')
-  async getSong(@Param('id') id: string) {
     return this.songService.byId(+id)
   }
 
