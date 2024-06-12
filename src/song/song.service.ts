@@ -5,6 +5,8 @@ import { hash } from 'argon2';
 import { SongEntity } from 'src/song/song.entity';
 import { SongDto } from './song.dto';
 import { LikeSongEntity } from './likeSong.entity';
+import { GetAllSongs } from './getAll.dto';
+import { PaginationService } from 'src/pagination/pagination.service';
 
 @Injectable()
 export class SongService {
@@ -13,6 +15,7 @@ export class SongService {
         private readonly songRepository: Repository<SongEntity>,
         @InjectRepository(LikeSongEntity)
         private readonly likeSongRepository: Repository<LikeSongEntity>,
+        private readonly paginationService: PaginationService
     ) { }
 
     async byId(id: number, isPublic = false) {
@@ -61,14 +64,18 @@ export class SongService {
         return song
     }
 
-    async getAllSongs(searchTerm?: string) {
+    async getAllSongs(dto: GetAllSongs) {
         let options: FindOptionsWhereProperty<SongEntity> = {}
+        const { searchTerm } = dto
 
         if (searchTerm)
             options = {
                 name: ILike(`%${searchTerm}%`)
             }
-        return this.songRepository.find({
+
+        const { perPage, skip } = this.paginationService.getPagination(dto)
+
+        const songs = await this.songRepository.find({
             where: {
                 ...options,
                 isPublic: true
@@ -82,6 +89,8 @@ export class SongService {
                     user: true,
                 }
             },
+            skip,
+            take: perPage,
             select: {
                 user: {
                     id: true,
@@ -91,6 +100,15 @@ export class SongService {
                 },
             }
         })
+
+        return {
+            songs, length: await this.songRepository.count({
+                where: {
+                    ...options,
+                    isPublic: true
+                }
+            })
+        }
     }
 
     async getMostPopularByListens() {
@@ -152,29 +170,29 @@ export class SongService {
     async updateReaction(id: number, songId: number) {
         const song = await this.byId(songId)
         const data = {
-          likedSong: { id: songId },
-          userId: { id }
+            likedSong: { id: songId },
+            userId: { id }
         }
-    
+
         const isLiked = await this.likeSongRepository.findOneBy(data)
-    
+
         if (!isLiked) {
-          const newLike = this.likeSongRepository.create(data)
-          this.likeSongRepository.save((newLike))
-    
-          song.likes++
-          this.songRepository.save(song)
-    
-          return true
+            const newLike = this.likeSongRepository.create(data)
+            this.likeSongRepository.save((newLike))
+
+            song.likes++
+            this.songRepository.save(song)
+
+            return true
         }
-    
+
         this.likeSongRepository.delete(data)
-    
+
         song.likes--
-        this.songRepository.save(song)    
-    
+        this.songRepository.save(song)
+
         return false
-      }
+    }
 }
 
 
