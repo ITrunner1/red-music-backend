@@ -6,8 +6,10 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:3000',
-      'http://89.248.206.108:3000',      
-      'https://89.248.206.108:3000',      
+      'http://89.248.206.108:3000',   
+      'http://red-music.fun',  
+      'https://89.248.206.108:3000',  
+      'https://red-music.fun',      
     ],
     credentials: true,
     exposedHeaders: 'set-cookie'
