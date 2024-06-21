@@ -4,7 +4,9 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: [       
+    origin: [    
+      'http://localhost:3000',   
+      'http://localhost:4200',
       'http://red-music.fun',  
       'http://red-music.fun:4200',
       'https://red-music.fun',  
