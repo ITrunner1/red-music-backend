@@ -10,6 +10,7 @@ import { SongModule } from './song/song.module';
 import { UserModule } from './user/user.module';
 import { CommentModule } from './comment/comment.module';
 import { PaginationModule } from './pagination/pagination.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { PaginationModule } from './pagination/pagination.module';
     PlaylistModule,
     FileModule,
     CommentModule,
-    PaginationModule
+    PaginationModule,
+    CategoryModule
   ],
   controllers: [AppController],
   providers: [AppService],

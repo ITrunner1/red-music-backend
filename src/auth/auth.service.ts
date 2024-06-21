@@ -5,12 +5,14 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
     constructor(
+        private readonly userService: UserService,
         @InjectRepository(UserEntity)
-        private readonly userRepository: Repository<UserEntity>,
+        private readonly userRepository: Repository<UserEntity>,        
         private jwt: JwtService
     ) { }
 
@@ -28,11 +30,7 @@ export class AuthService {
         const result = await this.jwt.verify(refreshToken)
         if (!result) throw new UnauthorizedException('Invalid fresh token')
 
-        const user = await this.userRepository.findOne({
-            where: {
-                id: result.id
-            }
-        })
+        const user = await this.userService.byId(result.id)  
 
         const tokens = await this.issueTokens(user.id)
 

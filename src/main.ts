@@ -4,12 +4,11 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: [
-      'http://localhost:3000',
-      'http://89.248.206.108:3000',   
+    origin: [       
       'http://red-music.fun',  
-      'https://89.248.206.108:3000',  
-      'https://red-music.fun',      
+      'http://red-music.fun:4200',
+      'https://red-music.fun',  
+      'https://red-music.fun:4200',           
     ],
     credentials: true,
     exposedHeaders: 'set-cookie'

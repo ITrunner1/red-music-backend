@@ -30,6 +30,9 @@ export class UserEntity extends Base {
     @Column({ default: '', name: 'avatar_path' })
     avatarPath: string
 
+    @Column({ default: false })
+    isAdmin: boolean;
+
     @OneToMany(() => SongEntity, song => song.user, { onDelete: 'CASCADE' })
     songs: SongEntity[]
 

@@ -32,6 +32,12 @@ export class SongEntity extends Base {
     @Column({ default: '', name: 'thumbnail_path' })
     thumbnailPath: string
 
+    @Column({ default: '' })
+    category: string
+
+    @Column({ default: 'New' })
+    status: string
+
     @ManyToOne(() => UserEntity, user => user.songs, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     user: UserEntity
