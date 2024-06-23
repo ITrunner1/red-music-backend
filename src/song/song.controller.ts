@@ -10,7 +10,7 @@ import { PaginationDto } from 'src/pagination/pagination.dto';
 export class SongController {
   constructor(private readonly songService: SongService) { }
 
-  @Get()
+  @Get("all")
   async getAllSongs(@Query() queryDto: GetAll) {
     return this.songService.getAllSongs(queryDto)
   }
@@ -18,6 +18,14 @@ export class SongController {
   @Get('most-popular')
   async getMostPopularByListens(@Query() queryDto: PaginationDto) {
     return this.songService.getMostPopularByListens(queryDto)
+  }
+
+  @Get('by-genre/:genreSlug')
+  async getSongByGenre(
+    @Param('genreSlug') genreSlug: string,
+    @Query() queryDto: PaginationDto
+  ) {
+    return this.songService.byGenre(genreSlug, queryDto)
   }
 
   @Get(':id')
@@ -65,5 +73,12 @@ export class SongController {
     @Param('songId') songId: string
   ) {
     return this.songService.updateReaction(+id, +songId)
+  }
+
+  // Admin  
+  @Get()
+  @Auth('admin')
+  async getAllNewSongs(@Query() queryDto: GetAll) {
+    return this.songService.getAllNewSongs(queryDto)
   }
 }

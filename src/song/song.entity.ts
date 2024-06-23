@@ -33,7 +33,7 @@ export class SongEntity extends Base {
     thumbnailPath: string
 
     @Column({ default: '' })
-    category: string
+    genre: string
 
     @Column({ default: 'New' })
     status: string

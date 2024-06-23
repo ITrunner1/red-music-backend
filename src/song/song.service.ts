@@ -78,7 +78,8 @@ export class SongService {
         const songs = await this.songRepository.find({
             where: {
                 ...options,
-                isPublic: true
+                isPublic: true,
+                status: "Checked",
             },
             order: {
                 createdAt: 'DESC'
@@ -117,7 +118,45 @@ export class SongService {
         const songs = await this.songRepository.find({
             where: {
                 listens: MoreThan(0),
-                isPublic: true
+                isPublic: true,
+                status: "Checked",
+            },
+            relations: {
+                user: true,
+            },
+            select: {
+                user: {
+                    id: true,
+                    name: true,
+                    avatarPath: true,
+                    isVerified: true
+                },
+            },
+            skip,
+            take: perPage,
+            order: {
+                listens: -1
+            }
+        })
+
+        return {
+            songs, length: await this.songRepository.count({
+                where: {
+                    isPublic: true
+                }
+            })
+        }
+    }
+
+    async byGenre(genreSlug: string, dto: PaginationDto) {
+        const { perPage, skip } = this.paginationService.getPagination(dto)
+
+        const songs = await this.songRepository.find({
+            where: {
+                listens: MoreThan(0),
+                isPublic: true,
+                genre: genreSlug,
+                status: "Checked",
             },
             relations: {
                 user: true,
@@ -204,6 +243,55 @@ export class SongService {
         this.songRepository.save(song)
 
         return false
+    }
+
+    // Admin
+    async getAllNewSongs(dto: GetAll) {
+        let options: FindOptionsWhereProperty<SongEntity> = {}
+        const { searchTerm } = dto
+
+        if (searchTerm)
+            options = {
+                name: ILike(`%${searchTerm}%`)
+            }
+
+        const { perPage, skip } = this.paginationService.getPagination(dto)
+
+        const songs = await this.songRepository.find({
+            where: {
+                ...options,
+                isPublic: true,
+                status: "New",
+            },
+            order: {
+                createdAt: 'DESC'
+            },
+            relations: {
+                user: true,
+                comments: {
+                    user: true,
+                }
+            },
+            skip,
+            take: perPage,
+            select: {
+                user: {
+                    id: true,
+                    name: true,
+                    avatarPath: true,
+                    isVerified: true
+                },
+            }
+        })
+
+        return {
+            songs, length: await this.songRepository.count({
+                where: {
+                    ...options,
+                    isPublic: true
+                }
+            })
+        }
     }
 }
 

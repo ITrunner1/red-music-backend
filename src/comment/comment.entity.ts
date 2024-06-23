@@ -9,6 +9,12 @@ export class CommentEntity extends Base {
     @Column({ default: '', type: 'text' })
     text: string
 
+    @Column({ default: 'New', type: 'text'})
+    status: string
+
+    @Column({ default: '', type: 'text'})
+    rejectedReason: string
+
     @ManyToOne(() => UserEntity, user => user.songs, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     user: UserEntity
