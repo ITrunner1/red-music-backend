@@ -52,7 +52,8 @@ export class AuthService {
         const newUser = this.userRepository.create({
             email: dto.email,
             password: await hash(dto.password),
-            name: dto.name
+            name: dto.name,
+            isAdmin: false
         })
 
         const tokens = await this.issueTokens(newUser.id)
@@ -84,7 +85,8 @@ export class AuthService {
         return {
             id: user.id,
             email: user.email,
-            name: user.name
+            name: user.name,
+            isAdmin: user.isAdmin
         }
     }
 

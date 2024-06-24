@@ -72,7 +72,8 @@ export class PlaylistService {
     const playlists = await this.playlistRepository.find({
       where: {
         ...options,
-        isPublic: true
+        isPublic: true,
+        status: "Checked",
       },
       order: {
         createdAt: 'DESC'
@@ -108,7 +109,8 @@ export class PlaylistService {
     const playlists = await this.playlistRepository.find({
       where: {
         listens: MoreThan(0),
-        isPublic: true
+        isPublic: true,
+        status: "Checked",
       },
       relations: {
         user: true,
@@ -128,6 +130,42 @@ export class PlaylistService {
       }
     })
 
+
+    return {
+      playlists, length: await this.playlistRepository.count({
+        where: {
+          isPublic: true
+        }
+      })
+    }
+  }
+
+  async byGenre(genreSlug: string, dto: PaginationDto) {
+    const { perPage, skip } = this.paginationService.getPagination(dto)
+
+    const playlists = await this.playlistRepository.find({
+      where: {
+        isPublic: true,
+        genre: genreSlug,
+        status: "Checked",
+      },
+      relations: {
+        user: true,
+      },
+      select: {
+        user: {
+          id: true,
+          name: true,
+          avatarPath: true,
+          isVerified: true
+        },
+      },
+      skip,
+      order: {
+        createdAt: 'DESC'
+      },
+      take: perPage,
+    })
 
     return {
       playlists, length: await this.playlistRepository.count({
@@ -195,5 +233,51 @@ export class PlaylistService {
     this.playlistRepository.save(playlist)
 
     return false
+  }
+
+  // Admin
+  async getAllNewPlaylists(dto: GetAll) {
+    let options: FindOptionsWhereProperty<PlaylistEntity> = {}
+    const { searchTerm } = dto
+
+    if (searchTerm)
+      options = {
+        name: ILike(`%${searchTerm}%`)
+      }
+
+    const { perPage, skip } = this.paginationService.getPagination(dto)
+
+    const playlists = await this.playlistRepository.find({
+      where: {
+        ...options,
+        isPublic: true,
+        status: "New",
+      },
+      order: {
+        createdAt: 'DESC'
+      },
+      relations: {
+        user: true,
+      },
+      skip,
+      take: perPage,
+      select: {
+        user: {
+          id: true,
+          name: true,
+          avatarPath: true,
+          isVerified: true
+        },
+      }
+    })
+
+    return {
+      playlists, length: await this.playlistRepository.count({
+        where: {
+          ...options,
+          isPublic: true
+        }
+      })
+    }
   }
 }

@@ -9,7 +9,12 @@ export class PlaylistDto {
 
     @IsString()
     picturePath: string
-
-    @IsBoolean()
+    
     isPublic: boolean
+
+    genre?:string
+
+    status?: string      
+    
+    rejectedReason?: string
 }

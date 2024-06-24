@@ -25,6 +25,15 @@ export class PlaylistEntity extends Base {
     @Column({ default: 0 })
     likes?: number
 
+    @Column({ default: '' })
+    genre: string
+
+    @Column({ default: 'New' })
+    status: string
+
+    @Column({ default: '' })
+    rejectionReason: string
+
     @ManyToOne(() => UserEntity, user => user.playlists, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     user: UserEntity

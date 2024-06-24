@@ -11,9 +11,8 @@ export class SongDto {
 
     @IsString()
     thumbnailPath: string
-
-    @IsString()
-    genre:string
+  
+    genre?:string
 
     status?: string      
     

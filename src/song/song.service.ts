@@ -153,7 +153,6 @@ export class SongService {
 
         const songs = await this.songRepository.find({
             where: {
-                listens: MoreThan(0),
                 isPublic: true,
                 genre: genreSlug,
                 status: "Checked",
@@ -169,11 +168,11 @@ export class SongService {
                     isVerified: true
                 },
             },
+            order: {
+                createdAt: 'DESC'
+            },
             skip,
             take: perPage,
-            order: {
-                listens: -1
-            }
         })
 
         return {

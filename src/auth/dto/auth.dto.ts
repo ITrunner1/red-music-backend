@@ -9,6 +9,8 @@ export class AuthDto {
     })
     @IsString()
     password: string
+
+    isAdmin: boolean
 }
 
 export class RegisterDto {
@@ -23,4 +25,6 @@ export class RegisterDto {
 
     @IsString()
     name: string
+
+    isAdmin: boolean
 }

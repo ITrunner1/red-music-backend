@@ -38,6 +38,9 @@ export class SongEntity extends Base {
     @Column({ default: 'New' })
     status: string
 
+    @Column({ default: '' })
+    rejectionReason: string
+
     @ManyToOne(() => UserEntity, user => user.songs, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     user: UserEntity

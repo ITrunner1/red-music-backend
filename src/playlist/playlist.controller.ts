@@ -10,7 +10,7 @@ import { PaginationDto } from 'src/pagination/pagination.dto';
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService) { }
 
-  @Get()
+  @Get('all')
   async getAllPlaylists(@Query() queryDto: GetAll) {
     return this.playlistService.getAllPlaylists(queryDto)
   }
@@ -31,7 +31,7 @@ export class PlaylistController {
   async getPrivatePlaylist(@CurrentUser('id') id: number) {
     return this.playlistService.getPlaylistById(+id)
   }
- 
+
   @Post('')
   @Auth()
   async createPlaylist(@CurrentUser('id') id: number) {
@@ -66,5 +66,20 @@ export class PlaylistController {
     @Param('playlistId') playlistId: string
   ) {
     return this.playlistService.updateReaction(+id, +playlistId)
+  }
+
+  @Get('by-genre/:genreSlug')
+  async getPlaylistByGenre(
+    @Param('genreSlug') genreSlug: string,
+    @Query() queryDto: PaginationDto
+  ) {
+    return this.playlistService.byGenre(genreSlug, queryDto)
+  }
+
+  // Admin  
+  @Get()
+  @Auth('admin')
+  async getAllNewPlaylists(@Query() queryDto: GetAll) {
+    return this.playlistService.getAllNewPlaylists(queryDto)
   }
 }
