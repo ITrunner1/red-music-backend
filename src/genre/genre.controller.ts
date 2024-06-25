@@ -23,25 +23,25 @@ export class GenreController {
       return this.genreService.byId(+id)
   } 
   
-  @UsePipes(new ValidationPipe()) 
-  @HttpCode(200)
-  @Auth('admin')  
-  @Put(':id')
-  async update(@Param('id') id: string, @Body() dto: GenreDto) {
-      return this.genreService.update(+id, dto)
-  }
+//   @UsePipes(new ValidationPipe()) 
+//   @HttpCode(200)
+//   @Auth('admin')  
+//   @Put(':id')
+//   async update(@Param('id') id: string, @Body() dto: GenreDto) {
+//       return this.genreService.update(+id, dto)
+//   }
 
-  @HttpCode(200)
-  @Auth('admin')    
-  @Delete(':id')
-  async delete(@Param('id') id: string){
-      return this.genreService.delete(+id)
-  }
+//   @HttpCode(200)
+//   @Auth('admin')    
+//   @Delete(':id')
+//   async delete(@Param('id') id: string){
+//       return this.genreService.delete(+id)
+//   }
 
-  @HttpCode(200)
-  @Auth('admin')  
-  @Post()
-  async create() {
-      return this.genreService.create()
-  } 
+//   @HttpCode(200)
+//   @Auth('admin')  
+//   @Post()
+//   async create() {
+//       return this.genreService.create()
+//   } 
 }

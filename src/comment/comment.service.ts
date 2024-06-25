@@ -11,12 +11,12 @@ export class CommentService {
         private readonly commentRepository: Repository<CommentEntity>
     ) { }
 
-    async getAll() {
-        return await this.commentRepository.find({
-            where: { status: 'New'},
-            order: { createdAt: "DESC" }
-        })
-    }
+    // async getAll() {
+    //     return await this.commentRepository.find({
+    //         where: { status: 'New'},
+    //         order: { createdAt: "DESC" }
+    //     })
+    // }
 
     async create(userId: number, dto: CommentDto) {
         const newComment = this.commentRepository.create({

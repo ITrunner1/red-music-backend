@@ -21,7 +21,7 @@ export class PlaylistService {
   async getPlaylistById(id: number, isPublic = false) {
     const playlist = await this.playlistRepository.findOne({
       where: isPublic ? {
-        id, isPublic: true
+        id, isPublic: true, status: 'Checked'
       } : {
         id
       },
@@ -44,6 +44,7 @@ export class PlaylistService {
           duration: true,
           audioPath: true,
           thumbnailPath: true,
+          status: true,
           user: {
             id: true,
             name: true,

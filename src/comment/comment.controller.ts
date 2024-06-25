@@ -8,11 +8,11 @@ import { Auth } from 'src/decorators/auth.decorator';
 export class CommentController {
   constructor(private readonly commentService: CommentService) { }
 
-  @Auth()
-  @Get()
-  async getAllNewComments() {
-    return this.commentService.getAll()
-  }
+  // @Auth()
+  // @Get()
+  // async getAllNewComments() {
+  //   return this.commentService.getAll()
+  // }
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
