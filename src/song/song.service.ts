@@ -263,7 +263,7 @@ export class SongService {
                 status: "New",
             },
             order: {
-                createdAt: 'DESC'
+                updatedAt: 'DESC'
             },
             relations: {
                 user: true,

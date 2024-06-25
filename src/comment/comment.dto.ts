@@ -7,9 +7,7 @@ export class CommentDto {
     @IsNumber()
     songId: number
 
-    @IsString()
     status: string
 
-    @IsString()
     rejectedReason: string
 }
